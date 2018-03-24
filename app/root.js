@@ -3,6 +3,7 @@ import Header from './components/header';
 import Player from './page/player';
 import List from './page/list';
 import Pubsub from 'pubsub-js';
+import { randomRange } from './utils/util';
 import { MUSIC_LIST } from './config/config';
 
 let App = React.createClass({
@@ -10,6 +11,7 @@ let App = React.createClass({
     return {
       musicList: MUSIC_LIST,
       currentMusicItem: MUSIC_LIST[0],
+      repeat: 'cycle',
     }
   },
   play(item) {
@@ -21,20 +23,26 @@ let App = React.createClass({
     })
   },
   playNext(type = 'next') {
-    const { musicList } = this.state;
+    const { musicList, currentMusicItem, repeat } = this.state; 
     const length = musicList.length;
-    const index = this.findCurrentIndex();
-    let newIndex = null;
-    if(type === 'next') {
-      newIndex = (index + 1) % length;
-    } else {
-      newIndex = (index - 1 + length ) % length;
+    const index = this.findCurrentIndex(musicList, currentMusicItem);
+    let newIndex = index;
+    if (repeat === 'cycle') {
+      if(type === 'next') {
+        newIndex = (index + 1) % length;
+      } else {
+        newIndex = (index - 1 + length ) % length;
+      }
+    } else if (repeat === 'random') {
+      newIndex = randomRange(0, length - 1);
+      while(newIndex === index) {
+        newIndex = randomRange(0, length - 1);
+      }
     }
     this.play(musicList[newIndex]);
   },
-  findCurrentIndex() {
-    const { musicList, currentMusicItem } = this.state;
-    return musicList.indexOf(currentMusicItem);
+  findCurrentIndex(arr, item) {
+    return arr.indexOf(item);
   },
   componentDidMount() {
     const { currentMusicItem, currentMusicItem: { file } } = this.state;
@@ -64,13 +72,24 @@ let App = React.createClass({
     });
     Pubsub.subscribe('NEXT', (msg) => {
       this.playNext();
-    })
+    });
+    Pubsub.subscribe('REPEEAT', (msg) => {
+      const repeats = ['cycle', 'random', 'once'];
+      const { repeat } = this.state;
+      const length = repeats.length;
+      const index = this.findCurrentIndex(repeats, repeat);
+      const newIndex = (index + 1) % length;
+      this.setState({
+        repeat: repeats[newIndex],
+      });
+    });
   },
   componentWillUnMount() {
     Pubsub.unsubscribe('DELETE');
     Pubsub.unsubscribe('PLAY');
     Pubsub.unsubscribe('PREV');
     Pubsub.unsubscribe('NEXT');
+    Pubsub.unsubscribe('REPEEAT');
     $('#player').unbind($.jPlayer.event.ended);
   },
   render() {

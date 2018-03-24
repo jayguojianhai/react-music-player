@@ -7,16 +7,16 @@ export const MUSIC_LIST = [
 		cover: 'http://oj4t8z2d5.bkt.clouddn.com/%E9%AD%94%E9%AC%BC%E4%B8%AD%E7%9A%84%E5%A4%A9%E4%BD%BF.jpg'
 	}, {
 		id: 2,
-		title: '风继续吹',
-		artist: '张国荣',
-		file: 'http://oj4t8z2d5.bkt.clouddn.com/%E9%A3%8E%E7%BB%A7%E7%BB%AD%E5%90%B9.mp3',
-		cover: 'http://oj4t8z2d5.bkt.clouddn.com/%E9%A3%8E%E7%BB%A7%E7%BB%AD%E5%90%B9.jpg'
+		title: '等你下课',
+		artist: '周杰伦',
+		file: 'http://m10.music.126.net/20180324213602/e0b18a2210ea28e3eb0ce5601892bf10/ymusic/ebac/a481/1973/7d80a0aa452ab692b5d68a92a4125f21.mp3',
+		cover: 'http://p1.music.126.net/A8qicH14toObbLpPMiKmBw==/109951163110962030.jpg'
 	}, {
 		id: 3,
-		title: '恋恋风尘',
-		artist: '老狼',
-		file: 'http://oj4t8z2d5.bkt.clouddn.com/%E6%81%8B%E6%81%8B%E9%A3%8E%E5%B0%98.mp3',
-		cover: 'http://oj4t8z2d5.bkt.clouddn.com/%E6%81%8B%E6%81%8B%E9%A3%8E%E5%B0%98.jpg'
+		title: '告白气球',
+		artist: '周杰伦',
+		file: 'http://m10.music.126.net/20180324214329/af8464c86901290d0325f1e4dd0dedca/ymusic/6e01/a4d4/bbef/2dda07904eb54d44abb278165e1c6ead.mp3',
+		cover: 'http://p1.music.126.net/cUTk0ewrQtYGP2YpPZoUng==/3265549553028224.jpg'
 	}, {
 		id: 4,
 		title: '我要你',

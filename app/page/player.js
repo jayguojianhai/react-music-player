@@ -50,6 +50,9 @@ let Player = React.createClass({
       isPlay: !isPlay,
     });
   },
+  repeat() {
+    Pubsub.publish('REPEEAT');
+  },
   prev() {
     Pubsub.publish('PREV');
   },
@@ -57,7 +60,7 @@ let Player = React.createClass({
     Pubsub.publish('NEXT');
   },
   render() {
-    const { currentMusicItem: { title, artist, cover } } = this.props;
+    const { currentMusicItem: { title, artist, cover }, repeat } = this.props;
     const { progress, volume, isPlay, leftTime } = this.state;
     return (
       <div className="player-page">
@@ -91,12 +94,12 @@ let Player = React.createClass({
               <i className="icon next ml20" onClick={this.next}></i>
             </div>
             <div className="-col-auto">
-              <i className={`icon repeat-cycle`}></i>
+              <i onClick={this.repeat} className={`icon repeat-${repeat}`}></i>
             </div>
           </div>
         </div>
         <div className="-col-auto cover">
-          <img src={cover} alt={title}/>
+          <img src={cover} alt={title} className={isPlay ? 'play' : ''} />
         </div>
         </div>
       </div>

@@ -18,7 +18,11 @@
 			height: 180px;
 			border-radius: 50%;
 		}
+		.play {
+			animation:spin 8s linear infinite;
+		}
 	}
+	@keyframes spin { 100% { transform:rotate(360deg); transform-origin: 50% 50%; } }
 	.volume-container {
 		position: relative;
 		left: 20px;
