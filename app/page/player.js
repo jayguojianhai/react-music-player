@@ -1,5 +1,7 @@
 import React from 'react';
 import Progress from '../components/progress';
+import { Link } from 'react-router';
+import Pubsub from 'pubsub-js';
 import './player.less';
 
 let duration = null;
@@ -9,19 +11,31 @@ let Player = React.createClass({
       progress: 0,
       volume: 0,
       isPlay: true,
+      leftTime: '',
     }
   },
   componentDidMount() {
     $('#player').bind($.jPlayer.event.timeupdate, (e) => {
       duration = e.jPlayer.status.duration;
+      const time = duration * (1 - e.jPlayer.status.currentPercentAbsolute / 100);
+      const leftTime = this.formartTime(time);
       this.setState({
         progress: e.jPlayer.status.currentPercentAbsolute,
         volume: e.jPlayer.options.volume * 100,
+        leftTime,
       });
     });
   },
   componentWillUnMount() {
     $('#player').unbind($.jPlayer.event.timeupdate);
+  },
+  formartTime(time) {
+    time = Math.floor(time);
+    const miniutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
+    const newTime = `${miniutes}:${seconds}`;
+    return newTime;
   },
   progressChangehandler(progress) {
     $('#player').jPlayer('play', duration * progress);
@@ -36,18 +50,24 @@ let Player = React.createClass({
       isPlay: !isPlay,
     });
   },
+  prev() {
+    Pubsub.publish('PREV');
+  },
+  next() {
+    Pubsub.publish('NEXT');
+  },
   render() {
     const { currentMusicItem: { title, artist, cover } } = this.props;
-    const { progress, volume, isPlay } = this.state;
+    const { progress, volume, isPlay, leftTime } = this.state;
     return (
       <div className="player-page">
-        <h1 className="caption"><a href="#">我的私人音乐坊 &gt;</a></h1>
+        <h1 className="caption"><Link to="/list">我的私人音乐坊 &gt;</Link></h1>
         <div className="mt20 row">
           <div className="controll-wrapper">
             <h2 className="music-title">{title}</h2>
             <h3 className="music-artist mt10">{artist}</h3>
             <div className="row mt20">
-              <div className="left-time -col-auto">leftTime</div>
+              <div className="left-time -col-auto">-{leftTime}</div>
               <div className="volume-container">
                 <i className="icon-volume rt" style={{top: 5, left: -5}}></i>
                 <div className="volume-wrapper">
@@ -58,18 +78,17 @@ let Player = React.createClass({
                 </div>
               </div>
             </div>
-            <div style={{height: 10, lineHeight: '10px'}}>
+            <div style={{height: 10, lineHeight: '10px', marginTop: 10}}>
 			        <Progress
-                barColor="#f00"
 								progress={progress}
 								onProgressChange={this.progressChangehandler}>
 			        </Progress>
             </div>
             <div className="mt35 row">
             <div>
-              <i className="icon prev"></i>
+              <i className="icon prev" onClick={this.prev}></i>
               <i className={`icon ml20 ${isPlay ? 'pause' : 'play'}`} onClick={this.play}></i>
-              <i className="icon next ml20"></i>
+              <i className="icon next ml20" onClick={this.next}></i>
             </div>
             <div className="-col-auto">
               <i className={`icon repeat-cycle`}></i>

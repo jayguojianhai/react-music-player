@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Root from './root';
+import Root from './router';
 
 render (
   <AppContainer>
@@ -11,8 +11,8 @@ render (
 );
 
 if (module.hot) {
-  module.hot.accept('./root', () => {
-    const NewRoot = require('./root').default;
+  module.hot.accept('./router', () => {
+    const NewRoot = require('./router').default;
     render (
       <AppContainer>
         <NewRoot />
