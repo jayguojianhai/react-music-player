@@ -1,7 +1,5 @@
 import React from 'react';
 import Header from './components/header';
-import Player from './page/player';
-import List from './page/list';
 import Pubsub from 'pubsub-js';
 import { randomRange } from './utils/util';
 import { MUSIC_LIST } from './config/config';
